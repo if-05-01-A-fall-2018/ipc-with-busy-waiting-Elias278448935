@@ -1,0 +1,55 @@
+1.	Race Condition
+A race condition is, when two or more processes try to do something at the same time. You can lose or overwrite the data.
+
+
+2.Disabling Interrupts
+2.1. Disabling interrupts is possible when you have a one core prozessor, becouse on a multi core prozessor are interrupts disabled only on the core that has been instructed to do so.
+2.2. The user process could block the other processes if they’re working on a single core processor.
+
+3.1.
+1: Process 1 waits until process 0 invoke leave_region(). After that, the process 1 can enter the critical region.
+2: Process 0 waits till process 1 leaves the critical region, then process 1 waits for process 0 to leave the region.
+
+3.2
+The variable loser is the process which must wait and The process who gets to do is the „winner“.
+
+3.3
+	#define ME 2
+
+	while (True) {
+	enter_region(ME);
+	// access shared data
+	leave_region(ME);
+	}
+
+
+	int loser;
+	bool interested[3];
+
+void enter_region(int process)
+{
+	int other;
+	int other2;
+
+	if(process == 0)
+	{
+		other = 1;
+		other2 = 2;
+	}
+
+	else if(process == 1)
+	{
+		other = 0;
+		other2 = 2;
+	}
+	else
+	{
+		other = 0;
+		other = 1;
+	}
+
+
+	interested[process] = true;
+	loser = process;
+	while (loser == process && interested[other] || loser == process && interested[other2]) ;
+}
